@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dengue Prevention Mini-Game</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    .wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin: auto;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        background: url('House.jpg') no-repeat center center;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 20px;
+        box-sizing: border-box;
+    }
+
+    #question-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        max-width: 800px;
+        background: rgba(255,255,255,0.85);
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    #question-box {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #choices-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .choice-btn {
+        width: 200px;
+        max-width: 80%;
+        padding: 10px;
+        margin: 5px 0;
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: #4FC3F7;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .choice-btn:hover { background-color: #0288D1; }
+
+    #feedback {
+        font-size: 1rem;
+        margin-top: 10px;
+        min-height: 24px;
+        text-align: center;
+    }
+
+    #next-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: #81C784;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px auto;
+        display: none;
+    }
+
+    .mosquito {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        pointer-events: none;
+        transition: transform 0.1s linear;
+        z-index: 10; /* Always in front of background */
+    }
+</style>
+</head>
+<body>
+<div id="game-container">
+    <div class="wrapper">
+        <div id="question-panel">
+            <div id="question-box"></div>
+            <div id="choices-container"></div>
+            <div id="feedback"></div>
+        </div>
+        <button id="next-btn">Next Question</button>        
+    </div>
+
+</div>
+
+<script>
+const scenarios = [
+{"question":"You see stagnant water in old tires. What should you do?","choices":["Ignore it","Drain the water","Add more water"],"answer":"Drain the water","feedback":"Draining stagnant water prevents mosquito breeding."},
+{"question":"Uncovered water container outside your house.","choices":["Cover it","Leave it open","Use it as is"],"answer":"Cover it","feedback":"Covering containers stops mosquitoes from laying eggs."},
+{"question":"Clogged drainage in your backyard.","choices":["Clean it","Ignore it","Throw trash in it"],"answer":"Clean it","feedback":"Cleaning drains removes stagnant water that breeds mosquitoes."},
+{"question":"You notice mosquito larvae in a small pond.","choices":["Leave it","Add fish","Throw chemicals randomly"],"answer":"Add fish","feedback":"Fish eat mosquito larvae and reduce mosquito population."},
+{"question":"You see water collected in flower pots.","choices":["Drain it","Add more water","Ignore it"],"answer":"Drain it","feedback":"Emptying pots prevents mosquitoes from breeding."},
+{"question":"You see old tires with water.","choices":["Remove them","Use as planters","Leave them"],"answer":"Remove them","feedback":"Old tires collect water and should be removed."},
+{"question":"You find a bucket left open outside.","choices":["Cover it","Use it","Ignore it"],"answer":"Cover it","feedback":"Covering containers prevents mosquito breeding."},
+{"question":"Unkept swimming pool water.","choices":["Clean and chlorinate","Leave it dirty","Add plants"],"answer":"Clean and chlorinate","feedback":"Pools must be treated to prevent mosquito breeding."},
+{"question":"You see trash collecting rainwater.","choices":["Remove trash","Ignore","Burn trash"],"answer":"Remove trash","feedback":"Trash traps water and must be disposed to prevent mosquitoes."},
+{"question":"Water bottle caps lying outside.","choices":["Throw away or cover","Use them","Ignore"],"answer":"Throw away or cover","feedback":"Small containers collect water and must be removed or covered."},
+{"question":"Uncovered water jars outside kitchen.","choices":["Cover them","Leave them","Pour out water elsewhere"],"answer":"Cover them","feedback":"Cover jars to prevent mosquito breeding."},
+{"question":"Rainwater collecting in playground equipment.","choices":["Drain it","Ignore it","Cover with tarp"],"answer":"Drain it","feedback":"Drain or cover to prevent mosquito breeding."},
+{"question":"Old cans outside your house.","choices":["Remove them","Leave them","Fill with sand"],"answer":"Remove them","feedback":"Cans collect water and must be removed."},
+{"question":"Plastic containers storing water outside.","choices":["Cover or empty","Leave them","Add soap"],"answer":"Cover or empty","feedback":"Emptying or covering prevents mosquito breeding."},
+{"question":"Buckets used for washing clothes left outside.","choices":["Empty after use","Leave them","Cover them all times"],"answer":"Empty after use","feedback":"Buckets must not hold stagnant water."},
+{"question":"Unused tires in backyard.","choices":["Dispose of them","Keep them","Use as flower pots"],"answer":"Dispose of them","feedback":"Tires are mosquito breeding grounds."},
+{"question":"Plastic bottle traps collecting water.","choices":["Remove or drain","Use as is","Cover partially"],"answer":"Remove or drain","feedback":"Eliminating stagnant water prevents mosquito breeding."},
+{"question":"Water collecting under refrigerator outside.","choices":["Wipe dry","Ignore","Add chemicals"],"answer":"Wipe dry","feedback":"Moist areas breed mosquitoes; keep dry."},
+{"question":"Rainwater in tarpaulin sheets.","choices":["Drain it","Leave it","Shake occasionally"],"answer":"Drain it","feedback":"Standing water must be drained."},
+{"question":"Bird baths holding water.","choices":["Change water frequently","Ignore","Cover with lid"],"answer":"Change water frequently","feedback":"Fresh water prevents mosquito larvae growth."}
+];
+
+let current = 0;
+let score = 0;
+let mosquitoes = [];
+
+const questionBox = document.getElementById('question-box');
+const choicesContainer = document.getElementById('choices-container');
+const feedbackBox = document.getElementById('feedback');
+const nextBtn = document.getElementById('next-btn');
+const container = document.getElementById('game-container');
+
+function showQuestion() {
+    const q = scenarios[current];
+    questionBox.textContent = q.question;
+    feedbackBox.textContent = '';
+    choicesContainer.innerHTML = '';
+
+    q.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice;
+        btn.className = 'choice-btn';
+        btn.onclick = () => checkAnswer(choice);
+        choicesContainer.appendChild(btn);
+    });
+
+    nextBtn.style.display = 'none';
+}
+
+function checkAnswer(choice) {
+    const q = scenarios[current];
+    if(choice === q.answer){
+        feedbackBox.textContent = "✅ Correct! " + q.feedback;
+        score++;
+    } else {
+        feedbackBox.textContent = `❌ Wrong! Correct: ${q.answer}. ${q.feedback}`;
+        addMosquito();
+    }
+    document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+    nextBtn.style.display = 'block';
+}
+
+nextBtn.onclick = () => {
+    current++;
+    if(current < scenarios.length){
+        showQuestion();
+    } else {
+        questionBox.textContent = "🎉 Game Over! 🎉";
+        feedbackBox.textContent = `Your Score: ${score}/${scenarios.length}`;
+        choicesContainer.innerHTML = '';
+        nextBtn.style.display = 'none';
+    }
+};
+
+function addMosquito(){
+    const imgName = Math.random() < 0.5 ? 'Mosquito1.png' : 'Mosquito2.png';
+    const mosquito = document.createElement('img');
+    mosquito.src = imgName;
+    mosquito.className = 'mosquito';
+    mosquito.style.left = Math.random()*80 + 'vw';
+    mosquito.style.top = Math.random()*50 + 20 + 'vh';
+    container.appendChild(mosquito);
+    mosquitoes.push({el: mosquito, dx: Math.random()*2+0.5, dy: Math.random()*2+0.5});
+}
+
+function moveMosquitoes(){
+    mosquitoes.forEach(m=>{
+        let x = parseFloat(m.el.style.left);
+        let y = parseFloat(m.el.style.top);
+        x += (Math.random()<0.5 ? -1:1)*m.dx;
+        y += (Math.random()<0.5 ? -1:1)*m.dy;
+        if(x<0) x=0; if(x>95) x=95;
+        if(y<20) y=20; if(y>90) y=90;
+        m.el.style.left = x + 'vw';
+        m.el.style.top = y + 'vh';
+    });
+    requestAnimationFrame(moveMosquitoes);
+}
+
+// Start game
+showQuestion();
+moveMosquitoes();
+</script>
+</body>
+</html>
