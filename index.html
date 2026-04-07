@@ -29,7 +29,7 @@
         width: 100vw;
         height: 100vh;
         position: relative;
-        background: url('House.jpg') no-repeat center center;
+        background: url('https://static.wixstatic.com/media/f06840_507ef0541e884561b6be60c759cc27eb~mv2.jpg') no-repeat center center;
         background-size: cover;
         display: flex;
         flex-direction: column;
@@ -202,7 +202,7 @@ nextBtn.onclick = () => {
 };
 
 function addMosquito(){
-    const imgName = Math.random() < 0.5 ? 'Mosquito1.png' : 'Mosquito2.png';
+    const imgName = Math.random() < 0.5 ? 'https://static.wixstatic.com/media/f06840_531c960099b44af09cfe4856fdad2970~mv2.png' : 'https://static.wixstatic.com/media/f06840_59c5b4822e07470b82e951fbe964425a~mv2.png';
     const mosquito = document.createElement('img');
     mosquito.src = imgName;
     mosquito.className = 'mosquito';
