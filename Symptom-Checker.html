@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dengue Symptom Self-Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;600;700&family=Anton&family=Gagalin&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            background: linear-gradient(135deg, #3a215b 0%, #754db9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(58, 33, 91, 0.3);
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Screen transitions */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Intro Screen */
+        .intro-screen {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .intro-screen h1 {
+            font-size: 48px;
+            font-family: 'Anton', sans-serif;
+            background: linear-gradient(135deg, #3a215b 0%, #754db9 50%, #f0c901 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .intro-screen p {
+            font-size: 20px;
+            color: #3a215b;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .intro-screen .mosquito {
+            margin: 20px 0;
+        }
+
+        .intro-screen .mosquito img {
+            width: 250px;
+            height: auto;
+            background: transparent;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Question Screen */
+        .question-screen h2 {
+            font-size: 28px;
+            font-family: 'Archivo Narrow', sans-serif;
+            background: linear-gradient(90deg, #3a215b 0%, #754db9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f0c901 0%, #f6ca17 50%, #d29504 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fef9e7 100%);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(240, 201, 1, 0.1);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 15px;
+            color: #3a215b;
+            font-weight: 700;
+            font-size: 16px;
+            font-family: 'Archivo Narrow', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: #f0c901;
+            background: rgba(240, 201, 1, 0.1);
+        }
+
+        .radio-option input[type="radio"],
+        .checkbox-option input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"]:checked + span,
+        .checkbox-option input[type="checkbox"]:checked + span {
+            font-weight: 600;
+            color: #3a215b;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #f0c901;
+            box-shadow: 0 0 0 3px rgba(240, 201, 1, 0.1);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3a215b 0%, #754db9 100%);
+            color: #f0c901;
+            flex: 1;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(240, 201, 1, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(240, 201, 1, 0.3);
+            background: linear-gradient(135deg, #3a215b 0%, #754db9 100%);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0c901;
+            color: #3a215b;
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: #f6ca17;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #f0c901 0%, #f6ca17 50%, #f0cc3a 100%);
+            color: #3a215b;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(240, 201, 1, 0.3);
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(240, 201, 1, 0.5);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .result-container {
+            padding: 40px;
+            border-radius: 16px;
+            margin: 30px 0;
+            border-top: 5px solid;
+            border-image: linear-gradient(90deg, #f0c901 0%, #d29504 100%) 1;
+        }
+
+        .score-display {
+            font-size: 120px;
+            font-weight: 900;
+            margin: 30px 0;
+            color: #000;
+            text-shadow: 0 2px 8px rgba(58, 33, 91, 0.2);
+            font-family: 'Anton', sans-serif;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .risk-level {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 20px 0;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .interpretation {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 20px 0;
+            text-align: left;
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        .low-risk {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 3px solid #28a745;
+            color: #155724;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        .low-risk .risk-level {
+            color: #28a745;
+            font-size: 44px;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .possible-dengue {
+            background: linear-gradient(135deg, #fff9c4 0%, #fff590 100%);
+            border: 3px solid #f9a825;
+            color: #856404;
+            box-shadow: 0 4px 15px rgba(249, 168, 37, 0.2);
+        }
+
+        .possible-dengue .risk-level {
+            color: #f9a825;
+            font-size: 44px;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .high-risk {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 3px solid #dc3545;
+            color: #721c24;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+        }
+
+        .high-risk .risk-level {
+            color: #dc3545;
+            font-size: 44px;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #721c24;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.15);
+            font-family: 'Archivo Narrow', sans-serif;
+        }
+
+        .details-summary {
+            background: linear-gradient(135deg, #f8f9fa 0%, #fef9e7 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .details-summary p {
+            margin: 10px 0;
+            color: #555;
+            font-weight: 500;
+            font-family: 'Archivo Narrow', sans-serif;
+        }
+
+        .btn-restart {
+            background: #3a215b;
+            color: #f0c901;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: 700;
+        }
+
+        .btn-restart:hover {
+            background: #754db9;
+        }
+
+        .disclaimer-box {
+            background: #fef9e7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            color: #3a215b;
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .intro-screen h1 {
+                font-size: 32px;
+            }
+
+            .intro-screen p {
+                font-size: 16px;
+            }
+
+            .question-screen h2 {
+                font-size: 22px;
+            }
+
+            .score-display {
+                font-size: 64px;
+            }
+
+            .risk-level {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .question-screen h2 {
+                font-size: 32px;
+            }
+
+            .form-group {
+                padding: 28px;
+            }
+
+            .button-group {
+                margin-top: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Intro Screen -->
+        <div class="screen intro-screen active" id="introScreen">
+            <div class="mosquito"><img src="https://www.clipartmax.com/png/middle/329-3298090_mosquito-png-background-image-chikungunya-mosquito-png.png" alt="Mosquito"></div>
+            <h1>Dengue Symptom Self-Checker</h1>
+            <p style="font-size: 20px; color: #3a215b; margin-bottom: 40px; font-weight: 600;">Are you At Risk of Dengue? Check Now!</p>
+            <div class="disclaimer-box">
+                <strong style="color: #dc3545; font-size: 18px;">Disclaimer:</strong><br>
+                This symptom checker is for informational purposes only and is not intended to diagnose dengue or any medical condition. Results are based on your responses and may not be accurate. Always consult a licensed healthcare professional for proper evaluation and treatment.
+            </div>
+            <button class="btn-start" onclick="startAssessment()">Start to Assess your Risk</button>
+        </div>
+
+        <!-- Question Screens -->
+        <div class="screen question-screen" id="questionScreen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <h2 id="questionTitle"></h2>
+            <form id="questionForm">
+                <div id="questionContent"></div>
+                <div class="button-group">
+                    <button type="button" class="btn-secondary" id="prevBtn" onclick="goToPrevious()" style="display: none;">Previous</button>
+                    <button type="button" class="btn-primary" id="nextBtn" onclick="goToNext()">Next</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="screen result-screen" id="resultScreen">
+            <h2 style="font-size: 28px; margin-bottom: 30px;">Assessment Complete</h2>
+            <div id="resultContent"></div>
+            <button class="btn-restart" onclick="location.reload();">Check Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Questions array
+        const questions = [
+            {
+                id: 'fever',
+                title: 'Do you have a fever?',
+                type: 'radio',
+                options: [
+                    { label: 'No', value: 'no' },
+                    { label: 'Yes', value: 'yes' }
+                ]
+            },
+            {
+                id: 'temperature',
+                title: 'What is your temperature?',
+                type: 'select',
+                dependent: 'fever',
+                dependentValue: 'yes',
+                options: [
+                    { label: 'Select temperature range...', value: '' },
+                    { label: '37.5 - 38°C (Low-Grade)', value: '1' },
+                    { label: '38.1 - 39.9°C (High-Grade)', value: '2' },
+                    { label: '≥ 40°C (Very High)', value: '3' }
+                ]
+            },
+            {
+                id: 'duration',
+                title: 'How long have you had the fever?',
+                type: 'select',
+                dependent: 'fever',
+                dependentValue: 'yes',
+                options: [
+                    { label: 'Select duration...', value: '' },
+                    { label: '< 1 day', value: '1' },
+                    { label: '1 - 2 days', value: '2' },
+                    { label: '3 - 7 days', value: '3' },
+                    { label: '> 7 days', value: '4' }
+                ]
+            },
+            {
+                id: 'symptoms',
+                title: 'Do you have any of these symptoms?',
+                type: 'checkbox',
+                options: [
+                    { label: 'Severe Headache', value: '2' },
+                    { label: 'Pain Behind Eyes', value: '2' },
+                    { label: 'Muscle / Joint Pain', value: '2' },
+                    { label: 'Nausea / Vomiting', value: '2' },
+                    { label: 'Skin Rash', value: '2' }
+                ]
+            },
+            {
+                id: 'warnings',
+                title: 'Do you have any of these warning signs?',
+                type: 'checkbox',
+                options: [
+                    { label: 'Severe Abdominal Pain', value: '4' },
+                    { label: 'Persistent Vomiting', value: '4' },
+                    { label: 'Bleeding (Gums, Nose, Stool)', value: '4' },
+                    { label: 'Difficulty Breathing', value: '4' },
+                    { label: 'Extreme Fatigue', value: '4' },
+                    { label: 'Restlessness', value: '4' }
+                ]
+            },
+            {
+                id: 'hydration',
+                title: 'Are you able to drink fluids normally?',
+                type: 'radio',
+                options: [
+                    { label: 'Yes, I can drink fluids normally', value: 'yes' },
+                    { label: 'No, I have difficulty drinking fluids', value: 'no' }
+                ]
+            }
+        ];
+
+        // State
+        let currentQuestionIndex = 0;
+        let responses = {};
+
+        function startAssessment() {
+            document.getElementById('introScreen').classList.remove('active');
+            document.getElementById('questionScreen').classList.add('active');
+            showQuestion(0);
+        }
+
+        function getVisibleQuestions() {
+            return questions.filter(q => {
+                if (!q.dependent) return true;
+                return responses[q.dependent] === q.dependentValue;
+            });
+        }
+
+        function showQuestion(index) {
+            const visibleQuestions = getVisibleQuestions();
+            if (index >= visibleQuestions.length) return;
+
+            const question = visibleQuestions[index];
+            currentQuestionIndex = index;
+
+            // Update progress bar
+            const progress = ((index + 1) / visibleQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update title
+            document.getElementById('questionTitle').textContent = question.title;
+
+            // Generate content
+            let content = '<div class="form-group">';
+            
+            if (question.type === 'radio') {
+                content += '<div class="radio-group">';
+                question.options.forEach(opt => {
+                    const checked = responses[question.id] === opt.value ? 'checked' : '';
+                    content += `<label class="radio-option">
+                        <input type="radio" name="${question.id}" value="${opt.value}" ${checked} onchange="updateResponse('${question.id}', this.value)">
+                        <span>${opt.label}</span>
+                    </label>`;
+                });
+                content += '</div>';
+            } else if (question.type === 'checkbox') {
+                content += '<div class="form-group">';
+                const selectedValues = responses[question.id] || [];
+                question.options.forEach(opt => {
+                    const checked = selectedValues.includes(opt.value) ? 'checked' : '';
+                    content += `<label class="checkbox-option">
+                        <input type="checkbox" name="${question.id}" value="${opt.value}" ${checked} onchange="updateCheckboxResponse('${question.id}', this.value, this.checked)">
+                        <span>${opt.label}</span>
+                    </label>`;
+                });
+                content += '</div>';
+            } else if (question.type === 'select') {
+                const selectedValue = responses[question.id] || '';
+                content += `<select name="${question.id}" onchange="updateResponse('${question.id}', this.value)">`;
+                question.options.forEach(opt => {
+                    const selected = selectedValue === opt.value ? 'selected' : '';
+                    content += `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
+                });
+                content += '</select>';
+            }
+
+            content += '</div>';
+            document.getElementById('questionContent').innerHTML = content;
+
+            // Update button states
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.style.display = index > 0 ? 'block' : 'none';
+            nextBtn.textContent = index === visibleQuestions.length - 1 ? 'See Results' : 'Next';
+        }
+
+        function updateResponse(questionId, value) {
+            responses[questionId] = value;
+        }
+
+        function updateCheckboxResponse(questionId, value, checked) {
+            if (!responses[questionId]) {
+                responses[questionId] = [];
+            }
+            if (checked) {
+                if (!responses[questionId].includes(value)) {
+                    responses[questionId].push(value);
+                }
+            } else {
+                responses[questionId] = responses[questionId].filter(v => v !== value);
+            }
+        }
+
+        function goToNext() {
+            const visibleQuestions = getVisibleQuestions();
+            if (currentQuestionIndex < visibleQuestions.length - 1) {
+                showQuestion(currentQuestionIndex + 1);
+            } else {
+                calculateAndShowResults();
+            }
+        }
+
+        function goToPrevious() {
+            if (currentQuestionIndex > 0) {
+                showQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function calculateAndShowResults() {
+            let score = 0;
+            let hasWarnings = false;
+
+            // Fever score
+            if (responses.fever === 'yes') {
+                const temperature = parseInt(responses.temperature) || 0;
+                const duration = parseInt(responses.duration) || 0;
+                score += temperature + duration;
+            }
+
+            // Associated symptoms score
+            if (responses.symptoms && Array.isArray(responses.symptoms)) {
+                responses.symptoms.forEach(val => {
+                    score += parseInt(val);
+                });
+            }
+
+            // Warning signs score
+            if (responses.warnings && Array.isArray(responses.warnings) && responses.warnings.length > 0) {
+                responses.warnings.forEach(val => {
+                    score += parseInt(val);
+                });
+                hasWarnings = true;
+            }
+
+            // Hydration score
+            if (responses.hydration === 'no') {
+                score += 2;
+            }
+
+            // Determine risk level
+            let riskLevel, interpretation, className;
+
+            if (score >= 10) {
+                riskLevel = 'High Risk / Warning Signs ⚠️';
+                interpretation = '<strong>Your symptoms may indicate severe dengue. Seek immediate medical attention.</strong>';
+                className = 'high-risk';
+            } else if (score >= 8) {
+                riskLevel = 'Possible Dengue';
+                interpretation = '<strong>Your symptoms may be consistent with dengue. It is recommended to consult a healthcare provider.</strong>';
+                className = 'possible-dengue';
+            } else {
+                riskLevel = 'Low Risk';
+                interpretation = '<strong>Your symptoms are not strongly suggestive of dengue. Continue monitoring.</strong>';
+                className = 'low-risk';
+            }
+
+            // Display results
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.add('active');
+
+            let resultHTML = `<div class="result-container ${className}">
+                <div><strong>Total Score:</strong></div>
+                <div class="score-display">${score}</div>
+                <div class="risk-level">${riskLevel}</div>
+                <div class="interpretation">${interpretation}</div>`;
+
+            if (hasWarnings) {
+                resultHTML += `<div class="warning-box">
+                    ⚠️ IMPORTANT: You have reported warning sign(s). 
+                    Please seek immediate medical attention at the nearest healthcare facility.
+                </div>`;
+            }
+
+            resultHTML += `<div class="details-summary">
+                <p><strong>Summary of your input:</strong></p>
+                <p>Fever: ${responses.fever === 'yes' ? 'Yes' : 'No'}${responses.fever === 'yes' ? ` (Temp: ${responses.temperature || 'N/A'}, Duration: ${responses.duration || 'N/A'})` : ''}</p>
+                <p>Symptoms: ${responses.symptoms && responses.symptoms.length > 0 ? responses.symptoms.length + ' symptom(s) selected' : 'None'}</p>
+                <p>Warning Signs: ${responses.warnings && responses.warnings.length > 0 ? responses.warnings.length + ' warning sign(s) detected' : 'None'}</p>
+            </div>
+            </div>`;
+
+            document.getElementById('resultContent').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+</html>
