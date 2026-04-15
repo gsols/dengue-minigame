@@ -507,7 +507,21 @@ function addMosquito(){
         e.stopPropagation();
         if (!mosquito.classList.contains('squashed')) {
             mosquito.classList.add('squashed');
-            // Remove after animation completes
+            
+            // Create splash effect
+            const splash = document.createElement('img');
+            splash.src = 'https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/blood.jpg';
+            splash.className = 'splash';
+            splash.style.left = mosquito.style.left;
+            splash.style.top = mosquito.style.top;
+            container.appendChild(splash);
+            
+            // Remove splash after animation
+            setTimeout(() => {
+                splash.remove();
+            }, 600);
+            
+            // Remove mosquito after animation completes
             setTimeout(() => {
                 const index = mosquitoes.indexOf(mosquitoObj);
                 if (index > -1) {
