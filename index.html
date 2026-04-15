@@ -46,18 +46,20 @@
         align-items: center;
         justify-content: center;
         width: 1500px;
-        height: 700px;
+        height: auto;
         background: rgba(255,255,255,0.85);
         border-radius: 10px;
-        padding: 40px;
+        padding: 25px;
         text-align: center;
-        justify-content:center;
+        justify-content: center;
+        max-height: 85vh;
+        overflow-y: auto;
     }
 
     #question-box {
-        font-size: 2.8rem;
+        font-size: 2.1rem;
         font-weight: 700;
-        margin-bottom: 30px;
+        margin-bottom: 18px;
         font-family: 'Archivo Narrow', sans-serif;
     }
 
@@ -70,11 +72,11 @@
     }
 
     .choice-btn {
-        width: 400px;
-        max-width: 80%;
-        padding: 20px;
-        margin: 15px 0;
-        font-size: 1.5rem;
+        width: 380px;
+        max-width: 85%;
+        padding: 15px;
+        margin: 10px 0;
+        font-size: 1.25rem;
         font-weight: bold;
         background-color: #754db9;
         color: #fff;
@@ -94,40 +96,40 @@
     }
 
     #feedback {
-        font-size: 1.3rem;
-        margin-top: 20px;
-        min-height: 32px;
+        font-size: 1.05rem;
+        margin-top: 12px;
+        min-height: 26px;
         text-align: center;
     }
 
     #next-btn {
-        padding: 18px 40px;
-        font-size: 1.4rem;
+        padding: 15px 34px;
+        font-size: 1.15rem;
         font-weight: bold;
         background-color: #f0c901;
         color: #3a215b;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin: 20px auto 15px auto;
+        margin: 14px auto 10px auto;
         display: none;
         font-family: 'Anton', sans-serif;
-    }
+    }}
 
     #next-btn:hover {
         background-color: #efc801;
     }
 
     #retry-btn {
-        padding: 18px 40px;
-        font-size: 1.4rem;
+        padding: 14px 32px;
+        font-size: 1.1rem;
         font-weight: bold;
         background-color: #d29504;
         color: #fff;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin-top: 25px;
+        margin-top: 20px;
         font-family: 'Anton', sans-serif;
     }
 
@@ -238,9 +240,9 @@
     }
 
     #question-image {
-        max-width: 500px;
-        max-height: 300px;
-        margin-bottom: 20px;
+        max-width: 480px;
+        max-height: 280px;
+        margin-bottom: 12px;
         border-radius: 10px;
         object-fit: cover;
     }
@@ -271,7 +273,7 @@
 
 <script>
 const scenarios = [
-{"question":"You see stagnant water in old tires. What should you do?","image":"","choices":["Ignore it","Drain the water","Add more water"],"answer":"Drain the water","feedback":"Draining stagnant water prevents mosquito breeding."},
+{"question":"You see stagnant water in old tires. What should you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/1.webp","choices":["Ignore it","Drain the water","Add more water"],"answer":"Drain the water","feedback":"Draining stagnant water prevents mosquito breeding."},
 {"question":"You find an uncovered water container outside your house. You should:","image":"","choices":["Cover it","Leave it open","Use it as is"],"answer":"Cover it","feedback":"Covering containers stops mosquitoes from laying eggs."},
 {"question":"You noticed a clogged drainage in your backyard.What will you do?","image":"","choices":["Clean it","Ignore it","Throw trash in it"],"answer":"Clean it","feedback":"Cleaning drains removes stagnant water that breeds mosquitoes."},
 {"question":"You notice mosquito larvae in a small pond in front of your house. What is your best action?","image":"","choices":["Leave it","Add fish","Throw chemicals randomly"],"answer":"Add fish","feedback":"Fish eat mosquito larvae and reduce mosquito population."},
