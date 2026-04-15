@@ -13,7 +13,7 @@
         height: 100%;
         font-family: 'Archivo Narrow', sans-serif;
         overflow: hidden;
-        cursor: url('https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/swatter-removebg-preview%20(1).png') 0 0, auto;
+        cursor: url('https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/Swat.png') 0 0, auto;
     }
 
     .wrapper {
@@ -143,7 +143,7 @@
         width: 50px;
         height: 50px;
         pointer-events: auto;
-        cursor: pointer;
+        cursor: url('https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/swatter-removebg-preview%20(1).png') 0 0, auto;
         transition: transform 0.1s linear;
         z-index: 10;
     }
@@ -501,7 +501,7 @@ function addMosquito(){
     mosquito.style.left = Math.random()*80 + 'vw';
     mosquito.style.top = Math.random()*50 + 20 + 'vh';
     container.appendChild(mosquito);
-    const mosquitoObj = {el: mosquito, dx: Math.random()*2+0.5, dy: Math.random()*2+0.5};
+    const mosquitoObj = {el: mosquito, dx: Math.random()*1+0.2, dy: Math.random()*1+0.2};
     mosquitoes.push(mosquitoObj);
     
     mosquito.onclick = (e) => {
