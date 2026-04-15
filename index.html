@@ -45,11 +45,11 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 1500px;
+        width: 1800px;
         height: auto;
         background: rgba(255,255,255,0.85);
         border-radius: 10px;
-        padding: 25px;
+        padding: 32px;
         text-align: center;
         justify-content: center;
         max-height: 85vh;
@@ -59,7 +59,7 @@
     #question-box {
         font-size: 2.1rem;
         font-weight: 700;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         font-family: 'Archivo Narrow', sans-serif;
     }
 
@@ -72,11 +72,11 @@
     }
 
     .choice-btn {
-        width: 380px;
+        width: 400px;
         max-width: 85%;
-        padding: 15px;
-        margin: 10px 0;
-        font-size: 1.25rem;
+        padding: 16px;
+        margin: 11px 0;
+        font-size: 1.28rem;
         font-weight: bold;
         background-color: #754db9;
         color: #fff;
@@ -96,25 +96,25 @@
     }
 
     #feedback {
-        font-size: 1.05rem;
-        margin-top: 12px;
-        min-height: 26px;
+        font-size: 1.15rem;
+        margin-top: 13px;
+        min-height: 28px;
         text-align: center;
     }
 
     #next-btn {
-        padding: 15px 34px;
-        font-size: 1.15rem;
+        padding: 16px 36px;
+        font-size: 1.2rem;
         font-weight: bold;
         background-color: #f0c901;
         color: #3a215b;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin: 14px auto 10px auto;
+        margin: 15px auto 11px auto;
         display: none;
         font-family: 'Anton', sans-serif;
-    }}
+    }}}}}
 
     #next-btn:hover {
         background-color: #efc801;
@@ -141,9 +141,51 @@
         position: absolute;
         width: 50px;
         height: 50px;
-        pointer-events: none;
+        pointer-events: auto;
+        cursor: pointer;
         transition: transform 0.1s linear;
-        z-index: 10; /* Always in front of background */
+        z-index: 10;
+    }
+
+    @keyframes splat {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.3);
+        }
+        100% {
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+
+    .mosquito.squashed {
+        animation: splat 0.4s ease-out forwards;
+    }
+
+    .splash {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        pointer-events: none;
+        z-index: 11;
+        animation: splashFade 0.6s ease-out forwards;
+    }
+
+    @keyframes splashFade {
+        0% {
+            opacity: 1;
+            transform: scale(0.8);
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1.2);
+        }
     }
 
     #intro-section {
@@ -172,7 +214,7 @@
     }
 
     #intro-title {
-        font-size: 3.5rem;
+        font-size: 7.5rem;
         font-weight: 700;
         color: #D32F2F;
         margin-bottom: 10px;
@@ -241,8 +283,8 @@
 
     #question-image {
         max-width: 480px;
-        max-height: 280px;
-        margin-bottom: 12px;
+        max-height: 270px;
+        margin-bottom: 15px;
         border-radius: 10px;
         object-fit: cover;
     }
@@ -274,25 +316,25 @@
 <script>
 const scenarios = [
 {"question":"You see stagnant water in old tires. What should you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/1.webp","choices":["Ignore it","Drain the water","Add more water"],"answer":"Drain the water","feedback":"Draining stagnant water prevents mosquito breeding."},
-{"question":"You find an uncovered water container outside your house. You should:","image":"","choices":["Cover it","Leave it open","Use it as is"],"answer":"Cover it","feedback":"Covering containers stops mosquitoes from laying eggs."},
-{"question":"You noticed a clogged drainage in your backyard.What will you do?","image":"","choices":["Clean it","Ignore it","Throw trash in it"],"answer":"Clean it","feedback":"Cleaning drains removes stagnant water that breeds mosquitoes."},
-{"question":"You notice mosquito larvae in a small pond in front of your house. What is your best action?","image":"","choices":["Leave it","Add fish","Throw chemicals randomly"],"answer":"Add fish","feedback":"Fish eat mosquito larvae and reduce mosquito population."},
-{"question":"You see water collected in your flower pots. What should you do?","image":"","choices":["Drain it","Add more water","Ignore it"],"answer":"Drain it","feedback":"Emptying pots prevents mosquitoes from breeding."},
-{"question":"Your neighbor notices old tires with water outside your house and tells you about it. What will you do?","image":"","choices":["Remove them","Use as planters","Leave them"],"answer":"Remove them","feedback":"Old tires collect water and should be removed."},
-{"question":"You find a pail left open outside. What is your best action?","image":"","choices":["Cover it","Use it","Ignore it"],"answer":"Cover it","feedback":"Covering containers prevents mosquito breeding."},
-{"question":"Unkept or uncleaned swimming pool water. What is the best action?","image":"","choices":["Clean and chlorinate","Leave it dirty","Add plants"],"answer":"Clean and chlorinate","feedback":"Pools must be treated to prevent mosquito breeding."},
-{"question":"Your neighbor notices trash outside your housecollecting rainwater. What will you do?","image":"","choices":["Remove trash","Ignore","Burn trash"],"answer":"Remove trash","feedback":"Trash traps water and must be disposed to prevent mosquitoes."},
-{"question":"Water bottle caps are lying outside. You should:","image":"","choices":["Throw them away","Use them","Ignore"],"answer":"Throw them away","feedback":"Small containers collect water and must be removed."},
-{"question":"You have uncovered water jars outside your kitchen. You should:","image":"","choices":["Cover them","Leave them","Pour out water elsewhere"],"answer":"Cover them","feedback":"Cover jars to prevent mosquito breeding."},
-{"question":"Mosquitoes will most likely breed in which area?","image":"","choices":["Under the Bed","In Uncovered Water Container","In a Covered Pitcher containing Orange Juice"],"answer":"In Uncovered Water Container","feedback":"Uncovered water containers are prime breeding grounds for mosquitoes."},
-{"question":"Old, empty, and opened cans are outside your house. what should you do?","image":"","choices":["Remove them","Leave them","Fill with sand"],"answer":"Remove them","feedback":"Cans collect water and must be removed."},
-{"question":"Plastic containers are collecting rainwater outside your house. You should:","image":"","choices":["Cover or empty","Leave them","Add soap"],"answer":"Cover or empty","feedback":"Emptying or covering prevents mosquito breeding."},
-{"question":"Buckets used for washing clothes were left outside. What is the best action to take?","image":"","choices":["Empty after use","Leave them","Cover them all times"],"answer":"Empty after use","feedback":"Buckets must not hold stagnant water."},
-{"question":"Unused tires in backyard. What should you do?","image":"","choices":["Dispose of them","Keep them","Use as flower pots"],"answer":"Dispose of them","feedback":"Tires are mosquito breeding grounds."},
-{"question":"An empty and unused boot collects rainwater in your backyard. What should you do?","image":"","choices":["Remove or drain","Wear it during rainy days","Cover partially"],"answer":"Remove or drain","feedback":"Eliminating stagnant water prevents mosquito breeding."},
-{"question":"You notice water collecting behind your refrigerator after defrosting. What will you do?","image":"","choices":["Drain/Empty","Leave it be","Add chemicals"],"answer":"Drain/Empty","feedback":"Stagnant water must be drained to prevent mosquito breeding."},
-{"question":"Rainwater collects in tarpaulin sheets in front of your house. You should:","image":"","choices":["Drain it","Leave it","Shake occasionally"],"answer":"Drain it","feedback":"Stagnant water must be drained."},
-{"question":"Where are mosquitoes less likely to breed?","image":"","choices":["In Clean Water","In Covered Containers","In Stagnant Water"],"answer":"In Covered Containers","feedback":"Covered containers prevent mosquito access to water."}
+{"question":"You find an uncovered water container outside your house. You should:","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/2.jpg","choices":["Cover it","Leave it open","Use it as is"],"answer":"Cover it","feedback":"Covering containers stops mosquitoes from laying eggs."},
+{"question":"You noticed a clogged drainage in your backyard.What will you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/3.jpg","choices":["Clean it","Ignore it","Throw trash in it"],"answer":"Clean it","feedback":"Cleaning drains removes stagnant water that breeds mosquitoes."},
+{"question":"You notice mosquito larvae in a small pond in front of your house. What is your best action?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/4.jpg","choices":["Leave it","Add fish","Throw chemicals randomly"],"answer":"Add fish","feedback":"Fish eat mosquito larvae and reduce mosquito population."},
+{"question":"You see water collected in your flower pots. What should you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/5.jpg","choices":["Drain it","Add more water","Ignore it"],"answer":"Drain it","feedback":"Emptying pots prevents mosquitoes from breeding."},
+{"question":"Your neighbor notices old tires with water outside your house and tells you about it. What will you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/6.webp","choices":["Remove them","Use as planters","Leave them"],"answer":"Remove them","feedback":"Old tires collect water and should be removed."},
+{"question":"You find a pail left open outside. What is your best action?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/7.webp","choices":["Cover it","Use it","Ignore it"],"answer":"Cover it","feedback":"Covering containers prevents mosquito breeding."},
+{"question":"Unkept or uncleaned swimming pool water. What is the best action?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/8.webp","choices":["Clean and chlorinate","Leave it dirty","Add plants"],"answer":"Clean and chlorinate","feedback":"Pools must be treated to prevent mosquito breeding."},
+{"question":"Your neighbor notices trash outside your house collecting rainwater. What will you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/9.jpg","choices":["Remove trash","Ignore","Burn trash"],"answer":"Remove trash","feedback":"Trash traps water and must be disposed to prevent mosquitoes."},
+{"question":"Water bottle caps are lying outside. You should:","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/10.webp","choices":["Throw them away","Use them","Ignore"],"answer":"Throw them away","feedback":"Small containers collect water and must be removed."},
+{"question":"You have uncovered water pails in your comfort room. You should:","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/11.webp","choices":["Cover them","Leave them","Pour out water elsewhere"],"answer":"Cover them","feedback":"Cover jars to prevent mosquito breeding."},
+{"question":"Mosquitoes will most likely breed in which area?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/12.png","choices":["Under the Bed","In Uncovered Water Container","In a Covered Pitcher containing Orange Juice"],"answer":"In Uncovered Water Container","feedback":"Uncovered water containers are prime breeding grounds for mosquitoes."},
+{"question":"Old, empty, and opened cans are outside your house. what should you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/13.jpg","choices":["Remove them","Leave them","Fill with sand"],"answer":"Remove them","feedback":"Cans collect water and must be removed."},
+{"question":"Plastic containers are collecting rainwater outside your house. You should:","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/14.webp","choices":["Cover or empty","Leave them","Add soap"],"answer":"Cover or empty","feedback":"Emptying or covering prevents mosquito breeding."},
+{"question":"Buckets used for washing clothes were left outside. What is the best action to take?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/15.jpg","choices":["Empty after use","Leave them","Cover them all times"],"answer":"Empty after use","feedback":"Buckets must not hold stagnant water."},
+{"question":"Unused tires in backyard. What should you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/16.webp","choices":["Dispose of them","Keep them","Use as flower pots"],"answer":"Dispose of them","feedback":"Tires are mosquito breeding grounds."},
+{"question":"An empty and unused boot collects rainwater in your backyard. What should you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/17.jpg","choices":["Remove or drain","Wear it during rainy days","Cover partially"],"answer":"Remove or drain","feedback":"Eliminating stagnant water prevents mosquito breeding."},
+{"question":"You notice water collecting behind your refrigerator after defrosting. What will you do?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/18.webp","choices":["Drain/Empty","Leave it be","Add chemicals"],"answer":"Drain/Empty","feedback":"Stagnant water must be drained to prevent mosquito breeding."},
+{"question":"Rainwater collects in tarpaulin sheets in front of your house. You should:","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/19.jpg","choices":["Drain it","Leave it","Shake occasionally"],"answer":"Drain it","feedback":"Stagnant water must be drained."},
+{"question":"Where are mosquitoes less likely to breed?","image":"https://raw.githubusercontent.com/gsols/dengue-minigame/refs/heads/main/20.png","choices":["In Clean Water","In Covered Containers","In Stagnant Water"],"answer":"In Covered Containers","feedback":"Covered containers prevent mosquito access to water."}
 ];
 
 let current = 0;
@@ -310,7 +352,18 @@ const gameContainer = document.getElementById('game-container');
 const playBtn = document.getElementById('play-btn');
 const questionImage = document.getElementById('question-image');
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 playBtn.onclick = () => {
+    current = 0;
+    score = 0;
+    shuffleArray(scenarios);
     introSection.style.display = 'none';
     gameContainer.style.display = 'flex';
     gameStarted = true;
@@ -435,6 +488,7 @@ function resetGame(){
     score = 0;
     mosquitoes.forEach(m => m.el.remove());
     mosquitoes = [];
+    shuffleArray(scenarios);
     showQuestion();
 }
 
@@ -446,7 +500,23 @@ function addMosquito(){
     mosquito.style.left = Math.random()*80 + 'vw';
     mosquito.style.top = Math.random()*50 + 20 + 'vh';
     container.appendChild(mosquito);
-    mosquitoes.push({el: mosquito, dx: Math.random()*2+0.5, dy: Math.random()*2+0.5});
+    const mosquitoObj = {el: mosquito, dx: Math.random()*2+0.5, dy: Math.random()*2+0.5};
+    mosquitoes.push(mosquitoObj);
+    
+    mosquito.onclick = (e) => {
+        e.stopPropagation();
+        if (!mosquito.classList.contains('squashed')) {
+            mosquito.classList.add('squashed');
+            // Remove after animation completes
+            setTimeout(() => {
+                const index = mosquitoes.indexOf(mosquitoObj);
+                if (index > -1) {
+                    mosquitoes.splice(index, 1);
+                }
+                mosquito.remove();
+            }, 400);
+        }
+    };
 }
 
 function moveMosquitoes(){
